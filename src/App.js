@@ -1,17 +1,16 @@
-import React from 'react';
+// App.js
+import React, { useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import logo from './capylogo.png'
+import Typography from '@mui/material/Typography';
+import logo from './capylogo.png';
+import MainContent from './MainContent'; // Import the new component
+import { Box } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import HowItWorks from './HowItWorks'; // Import the new component
+import Button from '@mui/material/Button';
 
 const darkTheme = createTheme({
   palette: {
@@ -19,70 +18,87 @@ const darkTheme = createTheme({
   },
 });
 
+export function Footer() {
+  return (
+    <Box sx={styles.footer}>
+      <Typography variant="body2">
+        Email us at <a href="dyllan@berkeley.edu" style={{ color: 'inherit', textDecoration: 'none' }}>dyllan@berkeley.edu</a>
+      </Typography>
+      <Typography variant="body2">
+        © Copyright 2024 LineUpp, Corp.
+      </Typography>
+    </Box>
+  )
+}
+
 function App() {
-  const handleSubmit = (event) => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const { email, targetAudience, question } = event.target.elements; // Destructure the form elements
+
+    const formData = {
+      email: email.value,
+      targetAudience: targetAudience.value,
+      question: question.value,
+    };
+
+    // Replace 'YOUR_ZAPIER_WEBHOOK_URL' with the URL provided by Zapier
+    await fetch('https://hooks.zapier.com/hooks/catch/17339037/3l7tlks/', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    }).catch(error => console.error('Fetch error:', error));
+    setIsSubmitted(true);
     console.log("Form submitted");
   };
 
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <AppBar position="static" color="default" elevation={0} sx={styles.appBar}>
-        <Toolbar>
-          {/* <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton> */}
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            <img src={logo} alt="Logo" style={{ maxHeight: '150px' }} />
-          </Typography>
-          <Button variant="outlined" sx={{ my: 1, mx: 1.5 }}>
-            Contact
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <Box sx={styles.mainContent}>
-        <Box sx={styles.textContent}>
-          <Typography variant="h3" gutterBottom>
-            SurveyBara | Survey ICPs at scale
-          </Typography>
-          <Typography variant="h6">
-            (1) Define your target audience. <br /> (2) Ask your question. <br /> (3) Get a google sheet of replies mapped to LinkedIn Profiles in days.
-          </Typography>
-        </Box>
-        <Card sx={styles.card}>
-          <CardContent>
-            <Box component="form" sx={styles.container} onSubmit={handleSubmit} noValidate autoComplete="off">
-              <TextField id="email" label="Your Email" variant="outlined" sx={styles.textField} />
-              <TextField id="target-audience" label="Target Audience" variant="outlined" sx={styles.textField} />
-              <TextField
-                id="outlined-multiline-static"
-                label="Question"
-                multiline
-                rows={4}
-                defaultValue="Default Value"
-                sx={styles.textField}
-              />
-              <Button type="submit" variant="outlined" color="primary" sx={styles.submitButton}>Submit</Button>
-            </Box>
-          </CardContent>
-        </Card>
-      </Box>
+      <Router>
+        <AppBar position="static" color="default" elevation={0} sx={styles.appBar}>
+          <Toolbar>
+            <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+              <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <img src={logo} alt="Logo" style={{ padding: '1rem 5%', maxHeight: '150px', cursor: 'pointer' }} />
+              </Link>
+            </Typography>
+            <Button variant="outlined" color="primary" component={Link} to="/howitworks" style={{ textDecoration: 'none', marginRight: '100px' }}>
+              How It Works
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <Routes>
+          <Route path="/howitworks" element={<HowItWorks />} />
+          <Route path="/" element={<MainContent isSubmitted={isSubmitted} handleSubmit={handleSubmit} />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }
 
-const styles = {
+export const styles = {
   appBar: {
     borderBottom: `1px solid ${darkTheme.palette.divider}`,
+  },
+  mainContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 'calc(100vh - 64px)',
   },
   mainContent: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center', // Keep this to align items vertically in the center
-    minHeight: 'calc(100vh - 64px)', // Adjust for AppBar height to ensure full vertical centering
-    padding: '2rem 5%', // Maintain padding for horizontal spacing
-    marginTop: '-64px', // Offset for the AppBar height
+    alignItems: 'center',
+    padding: '2rem 5%',
+    flexGrow: 1,
+  },
+  thankYouContent: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexGrow: 1,
   },
   textContent: {
     maxWidth: '50%',
@@ -103,7 +119,22 @@ const styles = {
   submitButton: {
     marginTop: 2,
     width: '100%',
-  }
+  },
+  thankYouBox: {
+    maxWidth: '600px',
+    padding: '20px',
+    textAlign: 'center',
+    backgroundColor: 'background.paper',
+    borderRadius: '10px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+  },
+  footer: {
+    textAlign: 'center',
+    padding: '20px',
+    marginTop: 'auto',
+    backgroundColor: 'background.paper',
+    borderTop: `1px solid ${darkTheme.palette.divider}`,
+  },
 };
 
 export default App;
