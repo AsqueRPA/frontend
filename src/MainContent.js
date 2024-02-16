@@ -7,6 +7,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Footer, styles } from './App'; 
+import { Grid } from '@mui/material';
+
 
 function MainContent({ isSubmitted, handleSubmit }) {
   return (
