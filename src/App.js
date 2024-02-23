@@ -69,7 +69,7 @@ function App() {
               color="primary"
               component={Link}
               to="/howitworks"
-              style={{ textDecoration: "none", marginRight: "100px" }}
+              style={{ textDecoration: "none", margin: "1rem 5%" }}
             >
               How It Works
             </Button>
@@ -88,52 +88,6 @@ function App() {
 export const styles = {
   appBar: {
     borderBottom: `1px solid ${darkTheme.palette.divider}`,
-  },
-  mainContainer: {
-    display: "flex",
-    flexDirection: "column",
-    minHeight: "calc(100vh - 64px)",
-  },
-  mainContent: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "2rem 5%",
-    flexGrow: 1,
-  },
-  thankYouContent: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    flexGrow: 1,
-  },
-  textContent: {
-    maxWidth: "50%",
-  },
-  card: {
-    minWidth: 600,
-    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-    padding: "20px",
-  },
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 2,
-  },
-  textField: {
-    width: "100%",
-  },
-  submitButton: {
-    marginTop: 2,
-    width: "100%",
-  },
-  thankYouBox: {
-    maxWidth: "600px",
-    padding: "20px",
-    textAlign: "center",
-    backgroundColor: "background.paper",
-    borderRadius: "10px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
   },
   footer: {
     textAlign: "center",

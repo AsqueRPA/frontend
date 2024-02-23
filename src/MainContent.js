@@ -133,18 +133,36 @@ function MainContent() {
             : "There was an error submitting your request. Please try again."}
         </Alert>
       )}
-      <Box sx={styles.mainContent}>
-        <Box sx={styles.textContent}>
-          <Typography variant="h3" gutterBottom>
+      <Box
+        sx={{
+          ...styles.mainContent,
+          flexDirection: window.innerWidth > 900 ? "row" : "column",
+        }}
+      >
+        <Box
+          sx={{
+            maxWidth: window.innerWidth > 900 ? "50%" : "90%",
+            marginBottom: window.innerWidth > 900 ? 0 : "2rem",
+          }}
+        >
+          <Typography
+            variant={window.innerWidth > 500 ? "h3" : "h6"}
+            gutterBottom
+          >
             SurveyBara | Survey ICPs at scale
           </Typography>
-          <Typography variant="h6">
+          <Typography variant={window.innerWidth > 500 ? "h6" : "body2"}>
             (1) Define your target audience. <br /> (2) Ask your question.{" "}
             <br /> (3) Get a google sheet of replies mapped to LinkedIn Profiles
             in days.
           </Typography>
         </Box>
-        <Card sx={styles.card}>
+        <Card
+          sx={{
+            ...styles.card,
+            width: window.innerWidth > 900 ? "50%" : "90%",
+          }}
+        >
           <CardContent>
             <Box
               component="form"
@@ -261,17 +279,12 @@ const styles = {
   },
   mainContent: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     alignItems: "center",
-    minHeight: "calc(100vh - 64px)",
+    minHeight: "calc(100vh - 256px)",
     padding: "2rem 5%",
-    marginTop: "-64px",
-  },
-  textContent: {
-    maxWidth: "50%",
   },
   card: {
-    minWidth: 600,
     boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
     padding: "20px",
   },
