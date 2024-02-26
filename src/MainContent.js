@@ -134,11 +134,10 @@ function MainContent() {
               <b>We Have Received Your Request</b>
             </Typography>
             <Typography variant="h6" component="p">
-              We have processed your request and are currently gathering
-              responses based on your criteria. Please check email in the next
-              few days for a Google Sheet containing all the responses. Should
-              you have any questions or feedbacks, please feel free to contact
-              us at dyllan@berkeley.edu.
+              We will soon begin gathering responses based on your criteria.
+              Please check email in the next few days for a Google Sheet
+              containing all the responses. Should you have any questions or
+              feedbacks, please feel free to contact us at dyllan@berkeley.edu.
             </Typography>
           </Box>
         </Box>
