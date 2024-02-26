@@ -81,11 +81,11 @@ function MainContent() {
               numberOfResponses: false,
               question: false,
             });
+            setIsSubmited(true);
           } else {
             setSeverity("error");
           }
           setShowAlert(true);
-          setIsSubmited(true);
           setTimeout(() => {
             setShowAlert(false);
           }, 5000);
