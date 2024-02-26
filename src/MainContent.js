@@ -9,11 +9,8 @@ import {
   CardContent,
   CssBaseline,
   Typography,
-  AppBar,
-  Toolbar,
   Alert,
 } from "@mui/material";
-import logo from "./capylogo.png";
 
 const darkTheme = createTheme({
   palette: {
@@ -22,8 +19,8 @@ const darkTheme = createTheme({
 });
 
 function MainContent() {
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-
+  const baseUrl = 'https://1352-2601-646-482-9080-793e-422a-e1a9-99c2.ngrok-free.app';
+  const [name, setName] = useState(""); // State for Name
   const [email, setEmail] = useState("");
   const [targetAudience, setTargetAudience] = useState("");
   const [numberOfResponses, setNumberOfResponses] = useState("");
@@ -31,6 +28,7 @@ function MainContent() {
   const [showAlert, setShowAlert] = useState(false);
   const [severity, setSeverity] = useState("");
   const [errors, setErrors] = useState({
+    name: false, // Validation for Name
     email: false,
     targetAudience: false,
     numberOfResponses: false,
@@ -40,6 +38,7 @@ function MainContent() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const newErrors = {
+      name: name === "", // Validate Name
       email: email === "",
       targetAudience: targetAudience === "",
       numberOfResponses: numberOfResponses === "",
@@ -51,13 +50,14 @@ function MainContent() {
 
     if (isFormValid) {
       const data = {
+        name, // Include Name in data object
         email,
         keyword: targetAudience,
         targetAmountResponse: numberOfResponses,
         question,
       };
 
-      fetch(`${baseUrl}/request-reachout`, {
+      fetch(`${baseUrl}/reachout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,11 +67,13 @@ function MainContent() {
         .then((res) => {
           if (res.status === 200) {
             setSeverity("success");
+            setName(""); // Reset Name
             setEmail("");
             setTargetAudience("");
             setNumberOfResponses("");
             setQuestion("");
             setErrors({
+              name: false, // Reset Name validation
               email: false,
               targetAudience: false,
               numberOfResponses: false,
@@ -84,17 +86,6 @@ function MainContent() {
           setTimeout(() => {
             setShowAlert(false);
           }, 5000);
-          // const formData = {
-          //   email,
-          //   targetAudience,
-          //   question,
-          // };
-
-          // // Replace 'YOUR_ZAPIER_WEBHOOK_URL' with the URL provided by Zapier
-          // await fetch('https://hooks.zapier.com/hooks/catch/17339037/3l7tlks/', {
-          //   method: 'POST',
-          //   body: JSON.stringify(formData),
-          // }).catch(error => console.error('Fetch error:', error));
         })
         .catch(() => {
           setSeverity("error");
@@ -172,22 +163,30 @@ function MainContent() {
               autoComplete="off"
             >
               <TextField
+                id="name"
+                label="Your Name"
+                variant="outlined"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onFocus={(e) => setErrors({ ...errors, name: false })}
+                onBlur={(e) => setErrors({ ...errors, name: e.target.value === "" })}
+                sx={styles.textField}
+                error={errors.name}
+                helperText={errors.name && "Name is required"}
+              />
+              <TextField
                 id="email"
                 label="Your Email"
                 variant="outlined"
                 required
                 value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                onFocus={(e) => {
-                  setErrors({ ...errors, email: false });
-                }}
-                onBlur={(e) => {
-                  setErrors({ ...errors, email: e.target.value === "" });
-                }}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={(e) => setErrors({ ...errors, email: false })}
+                onBlur={(e) => setErrors({ ...errors, email: e.target.value === "" })}
                 sx={styles.textField}
                 error={errors.email}
+                helperText={errors.email && "Email is required"}
               />
               <TextField
                 id="target-audience"
@@ -195,67 +194,45 @@ function MainContent() {
                 variant="outlined"
                 required
                 value={targetAudience}
-                onChange={(e) => {
-                  setTargetAudience(e.target.value);
-                }}
-                onFocus={(e) => {
-                  setErrors({ ...errors, targetAudience: false });
-                }}
-                onBlur={(e) => {
-                  setErrors({
-                    ...errors,
-                    targetAudience: e.target.value === "",
-                  });
-                }}
+                onChange={(e) => setTargetAudience(e.target.value)}
+                onFocus={(e) => setErrors({ ...errors, targetAudience: false })}
+                onBlur={(e) => setErrors({ ...errors, targetAudience: e.target.value === "" })}
                 sx={styles.textField}
                 error={errors.targetAudience}
+                helperText={errors.targetAudience && "Target Audience is required"}
               />
               <TextField
                 id="number-of-responses"
+                label="Number of Responses"
                 type="number"
                 inputProps={{ min: 0, max: 100 }}
-                onChange={(e) => {
-                  if (e.target.value === "") {
-                    setNumberOfResponses("");
-                    return;
-                  }
-                  const value = Math.min(Math.max(0, e.target.value), 100);
-                  setNumberOfResponses(value);
-                }}
-                onFocus={(e) => {
-                  setErrors({ ...errors, numberOfResponses: false });
-                }}
-                onBlur={(e) => {
-                  setErrors({
-                    ...errors,
-                    numberOfResponses: e.target.value === "",
-                  });
-                }}
-                label="Number of Responses"
                 variant="outlined"
                 required
                 value={numberOfResponses}
+                onChange={(e) => {
+                  const value = e.target.value === "" ? "" : Math.min(Math.max(0, e.target.value), 100);
+                  setNumberOfResponses(value);
+                }}
+                onFocus={(e) => setErrors({ ...errors, numberOfResponses: false })}
+                onBlur={(e) => setErrors({ ...errors, numberOfResponses: e.target.value === "" })}
                 sx={styles.textField}
                 error={errors.numberOfResponses}
+                helperText={errors.numberOfResponses && "Number of Responses is required"}
               />
               <TextField
-                id="outlined-multiline-static"
+                id="question"
                 label="Question"
-                required
                 multiline
                 rows={4}
+                variant="outlined"
+                required
                 value={question}
-                onChange={(e) => {
-                  setQuestion(e.target.value);
-                }}
-                onFocus={(e) => {
-                  setErrors({ ...errors, question: false });
-                }}
-                onBlur={(e) => {
-                  setErrors({ ...errors, question: e.target.value === "" });
-                }}
+                onChange={(e) => setQuestion(e.target.value)}
+                onFocus={(e) => setErrors({ ...errors, question: false })}
+                onBlur={(e) => setErrors({ ...errors, question: e.target.value === "" })}
                 sx={styles.textField}
                 error={errors.question}
+                helperText={errors.question && "Question is required"}
               />
               <Button
                 type="submit"
