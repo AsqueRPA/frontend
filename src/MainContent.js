@@ -214,6 +214,7 @@ function MainContent() {
                 <TextField
                   id="target-audience"
                   label="Target Audience"
+                  placeholder="i.e. Accessbility QA Engineers"
                   variant="outlined"
                   required
                   value={targetAudience}
@@ -270,6 +271,7 @@ function MainContent() {
                   multiline
                   rows={4}
                   variant="outlined"
+                  placeholder="i.e. What's your biggest painpoint with accessbility QA testing?"
                   required
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
