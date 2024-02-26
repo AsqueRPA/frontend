@@ -83,12 +83,12 @@ function MainContent() {
             });
             setIsSubmited(true);
           } else {
+            setShowAlert(true);
             setSeverity("error");
+            setTimeout(() => {
+              setShowAlert(false);
+            }, 5000);
           }
-          setShowAlert(true);
-          setTimeout(() => {
-            setShowAlert(false);
-          }, 5000);
         })
         .catch(() => {
           setSeverity("error");
